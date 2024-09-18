@@ -1,13 +1,10 @@
 from parsel import Selector
 
-from app.utils.browser import fetch
-
 from ..utils.dom import remove_attrib
 from ..utils.uuid import replace_uuids
 
 
-async def get_cleaned_dom(url: str):
-    html = await fetch(url)
+async def get_cleaned_dom(html: str):
     html = replace_uuids(html)
 
     dom = Selector(html)

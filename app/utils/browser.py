@@ -3,7 +3,6 @@ from contextlib import suppress
 from functools import cache
 
 from playwright.async_api import TimeoutError, async_playwright
-from promptools.openai import count_token
 
 
 async def _make_instance():
@@ -37,8 +36,5 @@ async def fetch(url: str):
     # await page.wait_for_load_state("networkidle")
     with suppress(TimeoutError):
         await page.wait_for_load_state("load")
-    html = await page.content()
 
-    print(f"{count_token(html) = }")
-    ensure_future(page.close())  # noqa: RUF006
-    return html
+    return page
