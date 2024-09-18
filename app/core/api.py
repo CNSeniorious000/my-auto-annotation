@@ -1,5 +1,6 @@
 from asyncio import ensure_future
-from json import loads
+from json import dumps, loads
+from pathlib import Path
 from typing import TypedDict, cast
 
 from promptools.openai import count_token
@@ -7,6 +8,7 @@ from promptools.openai import count_token
 from ..utils.browser import fetch
 from ..utils.css import merge_computed_styes
 from ..utils.dom import compress_spaces
+from ..utils.find import find_urls_in_json
 from ..utils.llm import complete
 from .parse import get_cleaned_dom
 from .prompt import main_loop
@@ -76,3 +78,9 @@ class ResultItem(TypedDict):
     selector: str
     html: list[str]
     style: dict[str, str]
+
+
+async def auto_annotation_file(path_in: str, path_out: str):
+    urls = find_urls_in_json(Path(path_in).read_text("utf-8"))
+    results = {url: await auto_annotate(url) for url in urls}
+    Path(path_out).write_text(dumps(results, ensure_ascii=False), "utf-8")
