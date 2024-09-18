@@ -38,5 +38,5 @@ async def fetch(url: str):
     html = await page.content()
 
     print(f"{count_token(html) = }")
-    ensure_future(page.close())
+    ensure_future(page.close())  # noqa: RUF006
     return html

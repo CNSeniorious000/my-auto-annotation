@@ -1,5 +1,3 @@
-from asyncio import ensure_future
-
 from promplate.llm.openai import AsyncChatGenerate
 from rich.color import Color
 from rich.console import Console
@@ -34,6 +32,3 @@ async def complete(prompt, **kwargs):
     print_token_usage(prompt, res)
 
     return res
-
-
-ensure_future(complete("1", max_tokens=1))

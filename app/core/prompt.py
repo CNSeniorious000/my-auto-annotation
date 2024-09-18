@@ -14,7 +14,7 @@ main_loop = Loop(first_pass := Node(one_pass, response_format={"type": "json_obj
 
 
 @first_pass.callback
-class _(Callback):
+class _(Callback):  # noqa: N801
     async def pre_process(self, context: Context):
         html = await fetch("http://ws.sdnews.com.cn/ft/202405/t20240525_4392444.htm")
         html = replace_uuids(html)
