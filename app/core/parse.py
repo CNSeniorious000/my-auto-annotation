@@ -12,7 +12,7 @@ async def get_cleaned_dom(url: str):
 
     dom = Selector(html)
 
-    dom.css("script, noscript, iframe, style, img[src^='data:'], svg").drop()
+    dom.css("script, noscript, iframe, style, img[src^='data:'], svg, source").drop()
 
     for i in dom.css("[style]"):
         remove_attrib(i, "style")

@@ -7,7 +7,7 @@ from ..utils.llm import complete
 from .parse import get_cleaned_dom
 from .prompt import main_loop
 
-MAX_TOKENS = 300_000
+MAX_TOKENS = 40_000
 
 
 async def auto_annotate(url: str) -> dict[str, str]:
