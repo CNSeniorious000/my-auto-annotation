@@ -11,7 +11,7 @@ tasks = [i["url"] for i in loads(Path("task1.json").read_text("utf-8"))["tasks"]
 
 async def main():
     try:
-        for i in range(490, 499):
+        for i in range(499, 505):
             res = await auto_annotate(tasks[i])
             _ = res
     except Exception as e:
