@@ -1,0 +1,32 @@
+<|user|>
+以下是一个网页的 html 内容（部分内容被省略）：
+
+```html
+{{ html }}
+```
+
+请给出达成以下目标的合适的 CSS 选择器：
+1. 文章标题
+2. 作者
+3. 发布时间
+4. 所有内容段落（不包括广告、推荐等）
+5. 内容图片（不包括广告、头像、推荐等）
+
+注意：
+- 如果没有元素，返回 null
+- 尽量使用简短但足够精准的选择器
+- 尽量不要用 utility classes，比如常见的 tailwindcss 类名（w-*, text-*, bg-*等）
+- 注意你输出的必须是合法的 CSS 选择器，比如注意转义类名中的 &, *, % 等字符
+- 如果页面上包括不止一篇文章，内容包括第一篇文章的即可
+
+<|system|>
+按照这样的格式，输出一个 JSON 对象：
+```json
+{
+    "title": "your_selector",
+    "author": "your_selector",
+    "datetime": "your_selector",
+    "paragraphs": "your_selector",
+    "images": "your_selector"
+}
+```
