@@ -1,7 +1,8 @@
 from asyncio import ensure_future
+from contextlib import suppress
 from functools import cache
 
-from playwright.async_api import async_playwright
+from playwright.async_api import TimeoutError, async_playwright
 from promptools.openai import count_token
 
 
@@ -22,7 +23,7 @@ async def cleanup():
 async def fetch(url: str):
     p = await get_instance()
 
-    browser = await p.chromium.launch()
+    browser = await p.chromium.launch(headless=False)
     print(browser)
 
     page = await browser.new_page()
@@ -34,7 +35,8 @@ async def fetch(url: str):
         "scrollTo({ top: document.body.scrollHeight / 4, behavior: 'smooth' })",
     )
     # await page.wait_for_load_state("networkidle")
-    await page.wait_for_load_state("load")
+    with suppress(TimeoutError):
+        await page.wait_for_load_state("load")
     html = await page.content()
 
     print(f"{count_token(html) = }")

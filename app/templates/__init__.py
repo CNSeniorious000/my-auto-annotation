@@ -4,7 +4,7 @@ from promplate import Template
 
 root = Path(__file__).parent
 
-one_pass = Template.read(root / "one-pass.j2")
+prompt = Template.read(root / "prompt.j2")
 
 
-__all__ = ["one_pass"]
+__all__ = ["prompt"]

@@ -18,6 +18,7 @@
 - 尽量不要用 utility classes，比如常见的 tailwindcss 类名（w-*, text-*, bg-*等）
 - 注意你输出的必须是合法的 CSS 选择器，比如注意转义类名中的 &, *, % 等字符
 - 如果页面上包括不止一篇文章，内容包括第一篇文章的即可
+- 标题不一定是 h1，也有可能是 h2。你需要找到文章语义上的标题，而非仅仅是 html 标签
 
 <|system|>
 按照这样的格式，输出一个 JSON 对象：
@@ -30,3 +31,17 @@
     "images": "your_selector"
 }
 ```
+
+{% if "__result__" in globals() -%}
+<|assistant|>
+{{
+    from json import dumps, loads
+    dumps( data := loads(__result__), ensure_ascii=False, indent=4)
+}}
+<|user|>
+我试了试你的选择器，但是结果不尽人意：
+{% for task, exception in problems -%}
+- {{ task }} 的选择器 {{ data[task] }} 不对：{{ exception or f"选出的结果为空（如果页面上不存在 {task} 的元素，你可以填 null）" }}
+{% endfor -%}
+请修改 {{ "、".join(i for i, _ in problems) }} 的选择器。
+{% endif -%}
