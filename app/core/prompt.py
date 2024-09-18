@@ -37,7 +37,7 @@ class _(Callback):  # noqa: N801
                     print_exception_only(e)
                     problems.append((key, format_exception_only(e)))
 
-        if not problems or not self.max_retries:
+        if not problems or self.max_retries <= 0:
             raise Jump(out_of=main_loop)
 
         self.max_retries -= 1

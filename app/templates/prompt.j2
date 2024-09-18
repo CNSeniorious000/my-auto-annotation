@@ -44,7 +44,7 @@
 <|user|>
 我试了试你的选择器，但是结果不尽人意：
 {% for task, exception in problems -%}
-- {{ task }} 的选择器 {{ data[task] }} 不对：{{ exception or f"选出的结果为空（如果页面上不存在 {task} 的元素，你可以填 null）" }}
+- {{ task }} 的选择器 {{ data[task] }} 不对：{{ exception or "querySelector 的结果为空" }}
 {% endfor -%}
 请修改 {{ "、".join(i for i, _ in problems) }} 的选择器。
 {% endif -%}
