@@ -9,8 +9,8 @@
 1. 文章标题
 2. 作者
 3. 发布时间
-4. 所有内容段落（不包括广告、推荐等）
-5. 内容图片（不包括广告、头像、推荐等）
+4. 所有文章段落（不包括广告、推荐等）
+5. 插图（不包括广告、头像、推荐等）
 
 注意：
 - 如果没有元素，返回 null
@@ -18,8 +18,8 @@
 - 尽量不要用 utility classes，比如常见的 tailwindcss 类名（w-*, text-*, bg-*等）
 - 注意你输出的必须是合法的 CSS 选择器，比如注意转义类名中的 &, *, % 等字符
 - 如果页面上包括不止一篇文章，内容包括第一篇文章的即可
-- 标题不一定是 h1，也有可能是 h2。你需要找到文章语义上的标题，而非仅仅是 html 标签
-- 尽量使用 class、id 或属性选择器，少用标签选择器。但是，看起来像是自动生成的 class 或 id 的选择器不可使用（比如带有一段hash的）！
+- 对于 title，你需要找到文章语义上的标题，而非仅仅是 html 标签
+- 看起来像是自动生成的 class 或 id 的选择器不可使用（比如带有一段hash的）！
 
 如果这不是一个新闻网页，请返回一个空对象 {}
 
@@ -43,8 +43,8 @@
 }}
 <|user|>
 我试了试你的选择器，但是结果不尽人意：
-{% for task, exception in problems -%}
-- {{ task }} 的选择器 {{ data[task] }} 不对：{{ exception or "querySelector 的结果为空" }}
-{% endfor -%}
+{% for task, exception in problems %}
+- {{ task }} 的选择器 `{{ data[task] }}` 不对：{{ exception or "querySelector 的结果为空" }}
+{% endfor %}
 请修改 {{ "、".join(i for i, _ in problems) }} 的选择器。
 {% endif -%}

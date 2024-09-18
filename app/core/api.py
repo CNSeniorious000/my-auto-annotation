@@ -1,9 +1,11 @@
 from asyncio import ensure_future
 from json import loads
+from typing import TypedDict, cast
 
 from promptools.openai import count_token
 
 from ..utils.browser import fetch
+from ..utils.css import merge_computed_styes
 from ..utils.dom import compress_spaces
 from ..utils.llm import complete
 from .parse import get_cleaned_dom
@@ -12,7 +14,7 @@ from .prompt import main_loop
 MAX_TOKENS = 40_000
 
 
-async def auto_annotate(url: str) -> dict[str, str]:
+async def auto_annotate(url: str):
     page = await fetch(url)
     html = await page.content()
     dom = await get_cleaned_dom(html)
@@ -25,7 +27,7 @@ async def auto_annotate(url: str) -> dict[str, str]:
 
     if body_tokens > MAX_TOKENS:
         ensure_future(page.close())  # noqa: RUF006
-        return {}
+        return
 
     context = await main_loop.ainvoke(
         {"page": page, "dom": dom, "html": body},
@@ -33,6 +35,44 @@ async def auto_annotate(url: str) -> dict[str, str]:
         temperature=0,
     )
 
+    result: dict[str, ResultItem] = {}
+
+    for task, selector in cast(dict[str, str | None], loads(context.result).items()):
+        if not selector:
+            continue
+
+        computed_styles = await page.eval_on_selector_all(
+            selector,
+            """
+                elements => {
+                    // 获得所有的 computedStyle
+                    const results = [];
+                    for (const element of elements) {
+                        const style = getComputedStyle(element);
+                        const styleObj = {};
+                        for (let i = 0; i < style.length; i++) {
+                            const name = style[i];
+                            styleObj[name] = style.getPropertyValue(name);
+                        }
+                        results.push(styleObj);
+                    }
+                    return results;
+                }
+            """,
+        )
+        merged_style = merge_computed_styes(computed_styles)
+        result[task] = {
+            "selector": selector,
+            "html": dom.css(selector).extract(),
+            "style": merged_style,
+        }
+
     ensure_future(page.close())  # noqa: RUF006
 
-    return loads(context.result)
+    return result
+
+
+class ResultItem(TypedDict):
+    selector: str
+    html: list[str]
+    style: dict[str, str]
