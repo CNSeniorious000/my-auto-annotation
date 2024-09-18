@@ -9,10 +9,10 @@ from ..templates import prompt
 from ..utils.dom import show
 from ..utils.log import print_exception_only, print_label
 
-main_loop = Loop(each := Node(prompt, response_format={"type": "json_object"}))
+main_loop = Loop(Node(prompt, response_format={"type": "json_object"}))
 
 
-@each.callback
+@main_loop.callback
 class _(Callback):  # noqa: N801
     max_retries = 4
 
